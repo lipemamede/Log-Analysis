@@ -17,7 +17,9 @@ This tool print Logs from Database
 
 Launch Vagrant VM by running `vagrant up`, you can the log in with `vagrant ssh`
 
-To load the data, use the command `psql -d news -f newsdata.sql` to connect a database and run the necessary SQL statements.
+To load the data, use the command `psql -d news -f newsdata.sql` to connect a database and run the necessary SQL statements. 
+
+[Click here to download database](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
 
 The database includes three tables:
 - Authors table
@@ -31,7 +33,7 @@ This project uses views that were created in the database and are referenced in 
 create view popular_articles as
 select articles.title, count(log.path) as views
 from log, articles
-where log.status = '200 OK' and log.path like concat('%', articles.slug)
+where log.status = '200 OK' and log.path like concat('/article/', articles.slug)
 group by log.path, articles.title
 order by views desc limit 3;
 ```
@@ -61,7 +63,7 @@ group by date(log.time)
 order by erros desc ) as ers,
 
 (select date(log.time) as data, count(date(log.time)) as validos
-from log where log.status = '200 OK'
+from log
 group by date(log.time)
 order by validos desc ) as oks
 
